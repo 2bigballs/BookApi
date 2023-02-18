@@ -18,6 +18,8 @@ namespace BookApi
                 app.UseSwaggerUI();
             }
 
+            app.UseGlobalHandler();
+
             app.UseLoggingRequest();
 
             app.UseHttpsRedirection();

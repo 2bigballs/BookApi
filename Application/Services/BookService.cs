@@ -25,11 +25,11 @@ namespace Application.Services
         public async Task<List<Book>> GetBooks(string? orderBy)
         {
             Expression<Func<Book, string>> orderByExpression = null;
-            if (orderBy.ToLower() == nameof(Book.Author).ToLower())
+            if (orderBy?.ToLower() == nameof(Book.Author).ToLower())
             {
                 orderByExpression = x => x.Author;
             }
-            if (orderBy.ToLower() == nameof(Book.Title).ToLower())
+            if (orderBy?.ToLower() == nameof(Book.Title).ToLower())
             {
                 orderByExpression = x => x.Title;
             }

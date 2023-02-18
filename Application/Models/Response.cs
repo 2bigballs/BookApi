@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Application.Models
 {
@@ -27,6 +29,11 @@ namespace Application.Models
         {
             var response = new Response<TType>(value,StatusCode);
             return response;
+        }
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(new {Message,StatusCode});
         }
     }
 
@@ -78,6 +85,11 @@ namespace Application.Models
         public static Response<EmptyValue> BadRequest(params string[] message)
         {
             return BadRequest<EmptyValue>(message);
+        }
+
+        public static Response<EmptyValue> InternalError(params string[] message)
+        {
+            return new Response<EmptyValue>(HttpStatusCode.InternalServerError, message);
         }
 
     }
