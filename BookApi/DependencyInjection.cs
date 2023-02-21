@@ -5,6 +5,9 @@ using Mapster;
 using MapsterMapper;
 using System.Reflection;
 using Application.Configuration;
+using Application.Helpers.Paths;
+using Application.Helpers.Url;
+using Infrastructure;
 
 namespace BookApi
 {
@@ -12,6 +15,7 @@ namespace BookApi
     {
         public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddCors();
             services.Configure<SecretCode>(configuration.GetSection("SecretCode"));
             services.AddControllers();
             services.AddEndpointsApiExplorer();
@@ -19,6 +23,10 @@ namespace BookApi
             services.AddDataAccess(configuration);
             services.AddApplication(configuration);
             services.AddMapsterConfiguration();
+            services.AddInfrastructure(configuration);
+            services.AddScoped<DirectoryPath>();
+            services.AddScoped<UrlManager>();
+            services.AddHttpContextAccessor();
             return services;
         }
 

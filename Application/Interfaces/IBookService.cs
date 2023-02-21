@@ -1,6 +1,7 @@
 ﻿
 using Application.Models;
 using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Interfaces
 {
@@ -12,11 +13,11 @@ namespace Application.Interfaces
 
         Task<Response<Book>?> GetBookDetails(int id);
 
-        Task<Response<int>> Create(Book book);
+        Task<Response<int>> Create(Book book,IFormFile file);
 
         Task<Response<EmptyValue>> Remove(int id, string key);
 
-        Task<Response<EmptyValue>> Update(Book book);
+        Task<Response<EmptyValue>> Update(Book book, IFormFile file);
     }
 
 }

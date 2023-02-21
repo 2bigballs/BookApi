@@ -39,7 +39,7 @@ namespace DataAccess.Reposetories
         }
         public async Task<Book?> GetBookById(int id)
         {
-            IQueryable<Book> bookQuery = _db.Books.Include(x => x.Reviews).Include(x=>x.Ratings);
+            IQueryable<Book> bookQuery = _db.Books.AsNoTracking().Include(x => x.Reviews).Include(x=>x.Ratings);
             var book = await bookQuery.FirstOrDefaultAsync(x => x.Id == id);
             return book;
         }

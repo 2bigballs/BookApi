@@ -12,7 +12,7 @@ namespace Application.Validators
                 .MatchName();
 
             RuleFor(p=>p.Title).Required()
-                .MaximumLength(50).WithMessage($"Genre must contains maximum 25 symbols");
+                .MaximumLength(50).WithMessage($"Genre must contains maximum 50 symbols");
 
             RuleFor(p => p.Genre).Required()
                 .MatchName()
@@ -21,7 +21,7 @@ namespace Application.Validators
             RuleFor(p => p.Cover).Required();
 
             RuleFor(p => p.Content).Required()
-                .Length(10,300).WithMessage($"Content must contains minimum 10 and maximum 300 symbols");
+                .Length(10,1000).WithMessage($"Content must contains minimum 10 and maximum 1000 symbols");
         }
     }
 }

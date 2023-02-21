@@ -12,5 +12,8 @@ namespace Domain.Entities
         public string Genre { get; set; }
         public List<Rating> Ratings { get; set; }
         public List<Review> Reviews { get; set; }
+
+      
     }
+
 }

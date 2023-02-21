@@ -1,5 +1,9 @@
 ﻿using Application.Configuration;
+using Application.Helpers.Paths;
+using Application.Helpers.Url;
 using Application.Interfaces;
+using BookApi.Extension;
+using BookApi.MapsterConfiguration;
 using Contract.BookDTOs;
 using Contract.RatingDTOs;
 using Contract.ReviewDTOs;
@@ -17,13 +21,19 @@ namespace BookApi.Controllers
         private readonly IRatingService _ratingService;
         private readonly IReviewService _reviewService;
         private readonly IMapper _mapper;
-        
-        public BookController(IOptions<SecretCode> secretCode, IBookService bookService, IRatingService ratingService, IReviewService reviewService, IMapper mapper)
+        private readonly IImageFileService _imageFileService;
+        private readonly DirectoryPath _directoryPath;
+        private readonly UrlManager _urlManager;
+
+        public BookController(IOptions<SecretCode> secretCode, IBookService bookService, IRatingService ratingService, IReviewService reviewService, IMapper mapper, IImageFileService imageFileService, DirectoryPath directoryPath, UrlManager urlManager)
         {
             _bookService = bookService;
             _ratingService = ratingService;
             _reviewService = reviewService;
             _mapper = mapper;
+            _imageFileService = imageFileService;
+            _directoryPath = directoryPath;
+            _urlManager = urlManager;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll(string? orderBy)
@@ -37,7 +47,7 @@ namespace BookApi.Controllers
         public async Task<IActionResult> GetRecommended(string? genre)
         {
             List<Book> books = await _bookService.GetRecommendedBook(genre);
-            var recommendedBooks = _mapper.Map<IEnumerable<RecommendedBookDTO>>(books);
+            var recommendedBooks = _mapper.Map<IEnumerable<GetBooksDTO>>(books);
             return Ok(recommendedBooks);
         }
 
@@ -50,33 +60,35 @@ namespace BookApi.Controllers
             return Response(bookDetailsResponse);
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> Create(GetBookDTO bookDTO)
+        public async Task<IActionResult> Create([FromForm] CreateBookDTO createBookDTO)
         {
-            var book = _mapper.Map<Book>(bookDTO);
-            var response = await _bookService.Create(book);
+            var book = _mapper.Map<Book>(createBookDTO);
+            var response = await _bookService.Create(book, createBookDTO.Cover);
             return Response(response);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(int id, string key)
         {
-            var response = await _bookService.Remove(id,key);
+            var response = await _bookService.Remove(id, key);
             return Response(response);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateBookDTO updateBookDto)
+        public async Task<IActionResult> Update([FromForm] UpdateBookDTO updateBookDTO)
         {
-            var book = _mapper.Map<Book>(updateBookDto);
-            var response = await _bookService.Update(book);
+
+            var updateBook = _mapper.Map<Book>(updateBookDTO);
+            var response = await _bookService.Update(updateBook, updateBookDTO.Cover);
             return Response(response);
         }
 
         [HttpPost("{id}/rating")]
         public async Task<IActionResult> CreateRating(int id, CreateRateDTO createRateDto)
         {
-            var rating = _mapper.From(createRateDto).AddParameters("bookId",id).AdaptToType<Rating>();
+            var rating = _mapper.From(createRateDto).AddParameters("bookId", id).AdaptToType<Rating>();
             var response = await _ratingService.Create(rating);
             return Response(response);
         }
@@ -89,4 +101,7 @@ namespace BookApi.Controllers
             return Response(response);
         }
     }
+
+
+
 }

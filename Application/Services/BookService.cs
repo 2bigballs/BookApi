@@ -1,10 +1,12 @@
 ﻿using System.Linq.Expressions;
 using Application.Configuration;
 using Application.Extensions;
+using Application.Helpers.Url;
 using Application.Interfaces;
 using Application.Models;
 using Domain.Entities;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace Application.Services
@@ -14,11 +16,15 @@ namespace Application.Services
         private readonly SecretCode _secretCode;
         private readonly IBookRepository _bookRepository;
         private readonly IValidator<Book> _bookValidator;
+        private readonly IImageFileService _imageFileService;
+        private readonly UrlManager _urlManager;
         
-        public BookService(IBookRepository bookRepository, IValidator<Book> bookValidator, IOptions<SecretCode> secretCode)
+        public BookService(IBookRepository bookRepository, IValidator<Book> bookValidator, IOptions<SecretCode> secretCode, IImageFileService imageFileService, UrlManager urlManager)
         {
             _bookRepository = bookRepository;
             _bookValidator = bookValidator;
+            _imageFileService = imageFileService;
+            _urlManager = urlManager;
             _secretCode = secretCode.Value;
         }
         
@@ -59,13 +65,18 @@ namespace Application.Services
             return SuccessResponses.Ok(book);
         }
 
-        public async Task<Response<int>> Create(Book book)
+        public async Task<Response<int>> Create(Book book,IFormFile file)
         {
             var validationResponse = await _bookValidator.ValidateAsync(book);
             if (!validationResponse.IsValid)
             {
                 return FailureResponses.BadRequest<int>(validationResponse.ErrorMessages());
             }
+
+            string fileName = await _imageFileService.SaveFileAsync(file);
+            string cover = _urlManager.CreateUrl(fileName);
+            book.Cover = cover;
+
             await _bookRepository.Create(book);
             await _bookRepository.SaveChanges();
             return SuccessResponses.Created(book.Id);
@@ -87,10 +98,10 @@ namespace Application.Services
             return SuccessResponses.NoContent();
         }
 
-        public async Task<Response<EmptyValue>> Update(Book book)
+        public async Task<Response<EmptyValue>> Update(Book book, IFormFile file)
         {
-            var isExist = await _bookRepository.IsExist(book.Id);
-            if (!isExist)
+            var currentBook = await _bookRepository.GetBookById(book.Id);
+            if (currentBook==null)
             {
                 return FailureResponses.NotFound($"Not found book by id:{book.Id}");
             }
@@ -99,6 +110,18 @@ namespace Application.Services
             {
                 return FailureResponses.BadRequest(validationResponse.ErrorMessages());
             }
+
+            book.Cover=currentBook.Cover;
+            if (file.Length!=0)
+            {
+                string? fileNameForDelete = _urlManager.GetFileName(currentBook.Cover);
+                _imageFileService.DeleteFile(fileNameForDelete);
+
+                string fileName = await _imageFileService.SaveFileAsync(file);
+                string cover = _urlManager.CreateUrl(fileName);
+                book.Cover = cover;
+            }
+
 
             _bookRepository.Update(book);
             await _bookRepository.SaveChanges();
