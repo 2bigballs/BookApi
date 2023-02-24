@@ -1,5 +1,4 @@
-﻿
-namespace Contract.ReviewDTOs
+﻿namespace Contract.ReviewDTOs
 {
     public class CreateReviewDTO
     {

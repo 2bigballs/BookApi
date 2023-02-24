@@ -10,7 +10,6 @@ namespace Application.Services
     {
         private readonly IReviewRepository _reviewRepository;
         private readonly IValidator<Review> _reviewValidator;
-
         public ReviewService(IReviewRepository reviewRepository, IValidator<Review> reviewValidator)
         {
             _reviewRepository = reviewRepository;
@@ -24,6 +23,7 @@ namespace Application.Services
             {
                 return FailureResponses.BadRequest<int>(validationResponse.ErrorMessages());
             }
+
             await _reviewRepository.Create(review);
             await _reviewRepository.SaveChanges();
             return SuccessResponses.Created(review.Id);

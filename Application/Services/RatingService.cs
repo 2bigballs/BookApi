@@ -27,7 +27,6 @@ namespace Application.Services
             await _ratingRepository.Create(rating);
             await _ratingRepository.SaveChanges();
             return SuccessResponses.Created(rating.Id);
-
         }
     }
 }

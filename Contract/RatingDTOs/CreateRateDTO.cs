@@ -1,5 +1,4 @@
-﻿
-namespace Contract.RatingDTOs
+﻿namespace Contract.RatingDTOs
 {
     public class CreateRateDTO
     {

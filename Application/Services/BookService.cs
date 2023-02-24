@@ -31,6 +31,7 @@ namespace Application.Services
         public async Task<List<Book>> GetBooks(string? orderBy)
         {
             Expression<Func<Book, string>> orderByExpression = null;
+
             if (orderBy?.ToLower() == nameof(Book.Author).ToLower())
             {
                 orderByExpression = x => x.Author;
@@ -39,18 +40,16 @@ namespace Application.Services
             {
                 orderByExpression = x => x.Title;
             }
+
             var books = await _bookRepository.GetAll(orderByExpression);
             return books;
-
         }
 
         public async Task<List<Book>> GetRecommendedBook(string? genre)
         {
             int reviewCount = 10;
             int bookCount = 10;
-
             var recommendedBooks = await _bookRepository.GetRecommended(reviewCount, genre, bookCount);
-
             return recommendedBooks;
         }
 
@@ -61,6 +60,7 @@ namespace Application.Services
             {
                 return FailureResponses.NotFound<Book>($"Not found book by id:{id}");
             }
+
             Book book = await _bookRepository.GetBookById(id);
             return SuccessResponses.Ok(book);
         }
@@ -88,11 +88,13 @@ namespace Application.Services
             {
                 return FailureResponses.Forbidden($"{key} is wrong SecretCode!");
             }
+
             bool isExist = await _bookRepository.IsExist(id);
             if (!isExist)
             {
                 return FailureResponses.NotFound<EmptyValue>($"Not found book by id:{id}");
             }
+
             await _bookRepository.RemoveById(id);
             await _bookRepository.SaveChanges();
             return SuccessResponses.NoContent();
@@ -105,6 +107,7 @@ namespace Application.Services
             {
                 return FailureResponses.NotFound($"Not found book by id:{book.Id}");
             }
+
             var validationResponse= await _bookValidator.ValidateAsync(book);
             if (!validationResponse.IsValid)
             {
@@ -121,7 +124,6 @@ namespace Application.Services
                 string cover = _urlManager.CreateUrl(fileName);
                 book.Cover = cover;
             }
-
 
             _bookRepository.Update(book);
             await _bookRepository.SaveChanges();

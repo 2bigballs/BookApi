@@ -1,6 +1,4 @@
-﻿using System.Net;
-using Application.Models;
-using Microsoft.VisualBasic;
+﻿using Application.Models;
 
 namespace BookApi.Middlewares
 {
@@ -26,6 +24,7 @@ namespace BookApi.Middlewares
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
+
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             Response<EmptyValue> internalResponse = FailureResponses.InternalError("Internal Server Error.");
@@ -33,7 +32,6 @@ namespace BookApi.Middlewares
             context.Response.StatusCode = (int)internalResponse.StatusCode;
             await context.Response.WriteAsync(internalResponse.ToString());
         }
-      
     }
 
     public static class GlobalHandlerMiddlewareExtension

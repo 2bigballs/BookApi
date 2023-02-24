@@ -1,5 +1,4 @@
-﻿
-namespace Contract.BookDTOs
+﻿namespace Contract.BookDTOs
 {
     public class GetBookDetailsDTO
     {

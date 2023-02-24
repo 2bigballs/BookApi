@@ -1,7 +1,4 @@
-﻿
-using System.Linq.Expressions;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class Book : BaseEntity
     {
@@ -12,8 +9,5 @@ namespace Domain.Entities
         public string Genre { get; set; }
         public List<Rating> Ratings { get; set; }
         public List<Review> Reviews { get; set; }
-
-      
     }
-
 }

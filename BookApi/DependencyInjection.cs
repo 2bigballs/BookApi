@@ -1,5 +1,4 @@
 ﻿using Application;
-
 using DataAccess;
 using Mapster;
 using MapsterMapper;
@@ -29,7 +28,6 @@ namespace BookApi
             services.AddHttpContextAccessor();
             return services;
         }
-
         private static IServiceCollection AddMapsterConfiguration(this IServiceCollection services)
         {
             var config = TypeAdapterConfig.GlobalSettings;

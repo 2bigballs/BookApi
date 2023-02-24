@@ -2,8 +2,6 @@
 using Application.Helpers.Paths;
 using Application.Helpers.Url;
 using Application.Interfaces;
-using BookApi.Extension;
-using BookApi.MapsterConfiguration;
 using Contract.BookDTOs;
 using Contract.RatingDTOs;
 using Contract.ReviewDTOs;
@@ -21,19 +19,18 @@ namespace BookApi.Controllers
         private readonly IRatingService _ratingService;
         private readonly IReviewService _reviewService;
         private readonly IMapper _mapper;
-        private readonly IImageFileService _imageFileService;
-        private readonly DirectoryPath _directoryPath;
-        private readonly UrlManager _urlManager;
+      
 
-        public BookController(IOptions<SecretCode> secretCode, IBookService bookService, IRatingService ratingService, IReviewService reviewService, IMapper mapper, IImageFileService imageFileService, DirectoryPath directoryPath, UrlManager urlManager)
+        public BookController(
+            IBookService bookService, 
+            IRatingService ratingService, 
+            IReviewService reviewService,
+            IMapper mapper)
         {
             _bookService = bookService;
             _ratingService = ratingService;
             _reviewService = reviewService;
             _mapper = mapper;
-            _imageFileService = imageFileService;
-            _directoryPath = directoryPath;
-            _urlManager = urlManager;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll(string? orderBy)
@@ -59,7 +56,6 @@ namespace BookApi.Controllers
             var bookDetailsResponse = response.ConvertToNewType(bookDetails);
             return Response(bookDetailsResponse);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateBookDTO createBookDTO)

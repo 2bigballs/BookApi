@@ -1,7 +1,4 @@
-﻿using BookApi.MapsterConfiguration;
-using Contract.BookDTOs;
-using Domain.Entities;
-using MapsterMapper;
+﻿using MapsterMapper;
 
 namespace BookApi.Extension
 {

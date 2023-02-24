@@ -19,7 +19,7 @@ namespace BookApi
             }
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-            //app.UseGlobalHandler();
+            app.UseGlobalHandler();
 
             app.UseStaticFiles();
 

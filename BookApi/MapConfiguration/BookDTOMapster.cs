@@ -18,17 +18,9 @@ namespace BookApi.MapsterConfiguration
                 .AverageRatingMapping(dst => dst.Rating);
 
             config.NewConfig<Book, GetBookDetailsDTO>().AverageRatingMapping(dst => dst.Rating);
-
-            
-
         }
     }
 
-    //public class AdditionMappingBookParameters
-    //{
-    //    public static string UrlImage => "urlImg";
-
-    //}
     public static class NewConfigExtension
     {
         public static TypeAdapterSetter<Book, TDestination> AverageRatingMapping<TDestination, TDestinationMember>(

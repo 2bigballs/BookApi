@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Helpers.Paths;
+﻿using Application.Helpers.Paths;
 using Application.Helpers.Url;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -47,6 +42,5 @@ namespace Infrastructure
             string filePath = Path.Combine(directoryPath, fileName);
             File.Delete(filePath);
         }
-
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 
 namespace Application.Helpers.Paths
 {
@@ -17,7 +16,5 @@ namespace Application.Helpers.Paths
             string directImagePath = Path.Combine(basePath,"wwwroot","images");
             return directImagePath;
         }
-
-
     }
 }

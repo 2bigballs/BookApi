@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Application.Models
 {
@@ -16,7 +15,6 @@ namespace Application.Models
         {
             Value = value;
             StatusCode = statusCode;
-
         }
 
         public Response(HttpStatusCode statusCode, params string[] message)
@@ -66,22 +64,27 @@ namespace Application.Models
         {
             return new Response<T>(HttpStatusCode.NotFound, message);
         }
+
         public static Response<EmptyValue> NotFound(string message)
         {
             return NotFound<EmptyValue>(message);
         }
+
         public static Response<T> Forbidden<T>(string message)
         {
             return new Response<T>(HttpStatusCode.Forbidden, message);
         }
+
         public static Response<EmptyValue> Forbidden(string message)
         {
             return Forbidden<EmptyValue>(message);
         }
+
         public static Response<T> BadRequest<T>(params string[] message)
         {
             return new Response<T>(HttpStatusCode.BadRequest, message);
         }
+
         public static Response<EmptyValue> BadRequest(params string[] message)
         {
             return BadRequest<EmptyValue>(message);
@@ -91,7 +94,5 @@ namespace Application.Models
         {
             return new Response<EmptyValue>(HttpStatusCode.InternalServerError, message);
         }
-
     }
-
 }

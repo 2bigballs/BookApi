@@ -17,7 +17,7 @@ namespace Application.Validators
             RuleFor(p => p.Reviewer).Required().MatchName();
 
             RuleFor(p => p.Message).Required()
-                .Length(10, 300).WithMessage($"Message must contains minimum 10 and maximum 300 symbols");
+                .Length(10, 700).WithMessage($"Message must contains minimum 10 and maximum 700 symbols");
         }
     }
 }

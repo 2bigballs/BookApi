@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 
-
 namespace DataAccess.DataSeeds
 {
     public class RatingSeed
