@@ -14,7 +14,8 @@ namespace Application
             services.AddScoped<IBookService,BookService>();
             services.AddScoped<IReviewService,ReviewService>();
             services.AddScoped<IRatingService,RatingService>();
-            services.AddValidatorsFromAssemblyContaining<BookValidator>();
+            services.AddValidatorsFromAssemblyContaining<BookValidator>(); 
+
             return services;
         }
     }

@@ -14,7 +14,7 @@ namespace BookApi
     {
         public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCors();
+           
             services.Configure<SecretCode>(configuration.GetSection("SecretCode"));
             services.AddControllers();
             services.AddEndpointsApiExplorer();
@@ -26,6 +26,7 @@ namespace BookApi
             services.AddScoped<DirectoryPath>();
             services.AddScoped<UrlManager>();
             services.AddHttpContextAccessor();
+            services.AddFrontendConfiguration(configuration);
             return services;
         }
         private static IServiceCollection AddMapsterConfiguration(this IServiceCollection services)
@@ -36,6 +37,18 @@ namespace BookApi
             TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
             return services;
         }
+
+        private static IServiceCollection AddFrontendConfiguration(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.AddCors();
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "C:\\Users\\illya\\OneDrive\\Робочий стіл\\Programming\\Front\\Angular\\library\\dist";
+            });
+            return services;
+        }
+
     }
     
 }

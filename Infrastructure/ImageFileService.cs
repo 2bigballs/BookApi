@@ -8,12 +8,10 @@ namespace Infrastructure
     public class ImageFileService : IImageFileService
     {
         private readonly DirectoryPath _directoryPath;
-        private readonly UrlManager _urlManager;
 
         public ImageFileService(DirectoryPath directoryPath, UrlManager urlManager)
         {
             _directoryPath = directoryPath;
-            _urlManager = urlManager;
         }
 
         public async Task<string> SaveFileAsync(IFormFile file)

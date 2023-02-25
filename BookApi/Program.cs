@@ -1,4 +1,5 @@
 using BookApi.Middlewares;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace BookApi
 {
@@ -17,8 +18,10 @@ namespace BookApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            }
             app.UseGlobalHandler();
 
             app.UseStaticFiles();
@@ -28,6 +31,28 @@ namespace BookApi
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            app.UseSpaStaticFiles();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "api/{controller}/{action}");
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "C:\\Users\\illya\\OneDrive\\Робочий стіл\\Programming\\Front\\Angular\\library";
+                if (app.Environment.IsDevelopment())
+                {
+
+                    spa.UseAngularCliServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                }
+            });
 
             app.MapControllers();
 
